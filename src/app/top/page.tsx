@@ -22,7 +22,7 @@ export default async function Page() {
       </div>
       <div className='mt-5'>
         <h1>Server Session</h1>
-        <pre>
+        <pre className='text-xs'>
           <code>{JSON.stringify(session)}</code>
         </pre>
       </div>

@@ -8,7 +8,9 @@ export const User = () => {
   return (
     <div>
       <h1>Client Session</h1>
-      <pre>{JSON.stringify(session)}</pre>
+      <pre className='text-xs'>
+        <code>{JSON.stringify(session)}</code>
+      </pre>
     </div>
   )
 }
