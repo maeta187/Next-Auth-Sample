@@ -5,7 +5,7 @@ import { ChangeEvent, useState } from 'react'
 
 const RegisterForm = () => {
   const [loading, setLoading] = useState(false)
-  let [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState({
     name: '',
     email: '',
     password: ''
@@ -29,7 +29,11 @@ const RegisterForm = () => {
         return
       }
 
-      signIn(undefined, { callbackUrl: '/' })
+      await signIn('credentials', {
+        email: formValues.email,
+        password: formValues.password,
+        callbackUrl: '/'
+      })
     } catch (error: any) {
       setLoading(false)
       console.error(error)
