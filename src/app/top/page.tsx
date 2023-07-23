@@ -10,7 +10,6 @@ import { User } from './user'
 
 export default async function Page() {
   const session = await getServerSession(authOptions)
-  console.log(session)
 
   return (
     <main className='flex flex-col justify-center items-center text-center h-screen'>
