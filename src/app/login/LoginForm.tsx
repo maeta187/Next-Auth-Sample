@@ -1,12 +1,14 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { ChangeEvent, useState } from 'react'
 
-const RegisterForm = () => {
+const LoginForm = () => {
+  const router = useRouter()
+  const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
   const [formValues, setFormValues] = useState({
-    name: '',
     email: '',
     password: ''
   })
@@ -16,24 +18,17 @@ const RegisterForm = () => {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        body: JSON.stringify(formValues),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      setLoading(false)
-      if (!res.ok) {
-        alert((await res.json()).message)
-        return
-      }
-
       await signIn('credentials', {
         email: formValues.email,
         password: formValues.password,
-        callbackUrl: '/'
+        redirect: false
       })
+      if (session) {
+        setLoading(false)
+        router.replace('/')
+      } else {
+        throw new Error('ログインできませんでした。')
+      }
     } catch (error: any) {
       setLoading(false)
       console.error(error)
@@ -51,16 +46,6 @@ const RegisterForm = () => {
       onSubmit={onSubmit}
       className='flex flex-col w-6/12 mx-auto gap-y-2.5'
     >
-      <label htmlFor='name'>Name</label>
-      <input
-        required
-        type='text'
-        name='name'
-        className='text-gray-900'
-        value={formValues.name}
-        onChange={handleChange}
-        style={{ padding: '1rem' }}
-      />
       <label htmlFor='email'>Email</label>
       <input
         required
@@ -87,10 +72,10 @@ const RegisterForm = () => {
           ${loading ? 'bg-gray-50' : 'bg-indigo-900'}`}
         disabled={loading}
       >
-        {loading ? 'loading...' : 'Register'}
+        {loading ? 'loading...' : 'Login'}
       </button>
     </form>
   )
 }
 
-export default RegisterForm
+export default LoginForm

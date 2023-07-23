@@ -7,6 +7,10 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt'
   },
+  // pagesの設定、ログインページを設定
+  pages: {
+    signIn: '/login'
+  },
   // providersの設定、GitHubとGoogleの認証を有効にする
   providers: [
     CredentialsProvider({
@@ -47,7 +51,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // セッションの情報を追加する
     session: ({ session, token }) => {
-      console.log('Session Callback', { session, token })
       return {
         ...session,
         user: {
@@ -59,7 +62,6 @@ export const authOptions: NextAuthOptions = {
     },
     // JWTの情報を追加する
     jwt: ({ token, user }) => {
-      console.log('JWT Callback', { token, user })
       if (user) {
         const u = user as unknown as any
         return {
